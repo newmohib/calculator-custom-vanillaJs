@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +8,23 @@
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
 </head>
-
 <body>
     <div class="container">
         <div class="row">
             <div class="col-6 mt-4">
-                <input onfocus="onfocus" type="text" class="input form-control" id="calculatorValue"
-                    aria-describedby="emailHelp">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-10  px-0">
+                            <input onfocus="onfocus" type="text" class="input form-control" id="calculatorValue"
+                                aria-describedby="emailHelp">
+                        </div>
+                        <div class="col-2 px-0 ">
+                            <button id="showHide" onclick="isKeyboardShow()" type="button" class="btn btn-light brn-sm btn-block">show</button>
+                        </div>
+                    </div>
+                </div>
                 <div id="keyboard" class="simple-keyboard hg-theme-default hg-layout-default">
                     <div class="container">
-                        <div class="row " id="needToMouse">
-
-                        </div>
                         <div class="row my-1" id="allNum"></div>
                         <div class="row mb-1 pl-1 mr-n3" id="allStr"></div>
                         <div class="row mb-1 px-1">
@@ -30,14 +34,11 @@
                                     class="btn btn-outline-secondary btn-sm px-4">Next</button></div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
         <script>
-            let fromLength = 10;
-            let toLength = 15;
+
             let arr = [
                 { type: "num", value: 0 },
                 { type: "num", value: 1 },
@@ -71,6 +72,13 @@
 
             ];
 
+            let initialFromLength = 10;
+            let fromLength = initialFromLength;
+            let strButtonView = 5;
+            let toLength = fromLength + strButtonView;
+            let total = arr.length;
+            let isShow = false;
+
             const createButton = () => {
                 var buttonText = '';
                 var buttonNum = '';
@@ -85,7 +93,6 @@
                 document.getElementById("allNum").innerHTML = buttonNum;
                 document.getElementById("allStr").innerHTML = buttonText;
             };
-            
             const getData = (value) => {
                 let existValue = document.getElementById("calculatorValue").value;
                 let superscript = { 0: '\u2070', 1: '\u00B9', 2: '\u00B2', 3: '\u00B3', 4: '\u2074', 5: '\u2075', 6: '\u2076', 7: '\u2077', 8: '\u2078', 9: '\u2079' }
@@ -99,17 +106,34 @@
                 }
             }
             const previous = () => {
-                toLength = fromLength - 1;
-                fromLength = toLength - 5;
+                if (toLength - strButtonView > initialFromLength) {
+                    toLength = fromLength - 1;
+                    fromLength = toLength - strButtonView;
+                } else {
+                    fromLength = initialFromLength;
+                }
                 createButton();
             };
             const next = () => {
-                fromLength = toLength + 1;
-                toLength = fromLength + 5;
+                if (fromLength + strButtonView < total) {
+                    fromLength = toLength + 1;
+                    toLength = fromLength + strButtonView;
+                }
                 createButton();
             }
             createButton();
+            const isKeyboardShow = () => {
+                if (isShow) {
+                    document.getElementById("keyboard").style.display = 'block';
+                    isShow= !isShow;
+                    document.getElementById("showHide").innerHTML= 'hide'
+                } else {
+                    document.getElementById("keyboard").style.display = 'none';
+                    isShow= !isShow;
+                    document.getElementById("showHide").innerHTML= 'show'
+                }
+            }
+            isKeyboardShow()
         </script>
 </body>
-
 </html>
